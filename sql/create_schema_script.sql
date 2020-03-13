@@ -1,5 +1,5 @@
 SET @db='melisr';
-USE melisr;
+USE specify_development;
 
 DROP TABLE IF EXISTS spschema_table;
 CREATE TABLE spschema_table (

@@ -86,9 +86,11 @@ class SpecifySchemaModel extends CI_Model {
          * WHERE f.TableName='collectionobject' AND ((lc.DisciplineID=3 AND lc.SchemaType=0) OR lci.SpLocaleContainerItemID IS NULL)
          * ORDER BY f.FieldID;
          */
-        $this->db->select("lci.SpLocaleContainerItemID, f.FieldName, lcin.`Text` AS FieldTitle, lcid.`Text` AS FieldDescription,
+        $this->db->select("lci.SpLocaleContainerItemID, f.FieldName, 
+            group_concat(distinct lcin.`Text`) AS FieldTitle, 
+            group_concat(distinct lcid.`Text`) AS FieldDescription,
             lci.PickListName, lci.IsRequired=1 AS IsRequired, lci.IsHidden=1 AS IsHidden, f.FieldType, f.IsNullable, f.FieldKey,
-            IF(ff.SpFormFieldID IS NOT NULL, 1, 0) AS IsOnForm", FALSE);
+            IF(count(ff.SpFormFieldID)>0, 1, 0) AS IsOnForm", false);
         $this->db->from('splocalecontainer lc');
         $this->db->join('splocalecontaineritem lci', 'lc.SpLocaleContainerID=lci.SpLocaleContainerID');
         $this->db->join('splocaleitemstr lcin', 'lci.SpLocaleContainerItemID=lcin.SpLocaleContainerItemNameID', 'left');
@@ -96,8 +98,8 @@ class SpecifySchemaModel extends CI_Model {
         $this->db->join('spschema_field f', 'lc.Name=f.TableName AND lci.Name=f.FieldName', 'right');
         $this->db->join('spschema_formfield ff', 'f.TableName=ff.Table AND f.FieldName=ff.Field', 'left');
         $this->db->where("f.TableName='$table' AND ((lc.DisciplineID=3 AND lc.SchemaType=0) OR lci.SpLocaleContainerItemID IS NULL)", FALSE, FALSE);
-        $this->db->group_by('f.FieldID');
-        //$this->db->order_by('f.FieldID');
+        $this->db->group_by('lc.SpLocaleContainerID, lci.SpLocaleContainerItemID, f.FieldID');
+        $this->db->order_by('f.FieldID');
         $query = $this->db->get();
         if ($query->num_rows()) {
             foreach ($query->result_array() as $row) {
@@ -117,11 +119,13 @@ class SpecifySchemaModel extends CI_Model {
          * GROUP BY Key_name
          * ORDER BY IndexID;
          */
-        $this->db->select("Key_name, Non_unique, GROUP_CONCAT(ColumnName ORDER BY Seq_in_index SEPARATOR ', ') AS `Columns`, IsNullable, Index_type", FALSE);
+        $this->db->select("Key_name, group_concat(distinct Non_unique) AS Non_unique,
+  GROUP_CONCAT(ColumnName ORDER BY Seq_in_index SEPARATOR ', ') AS `Columns`,
+  group_concat(distinct IsNullable) AS IsNullable, group_concat(distinct Index_type) AS Index_type", false);
         $this->db->from('spschema_index');
         $this->db->where('TableName', $table);
         $this->db->group_by('Key_name');
-        $this->db->order_by('IndexID');
+        //$this->db->order_by('IndexID');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -435,11 +439,11 @@ class SpecifySchemaModel extends CI_Model {
     
     public function getFormsForTable($table) {
         $ret = array();
-        $query = $this->db->query("SELECT ViewSet, `Table`, Form
+        $query = $this->db->query("SELECT group_concat(distinct ViewSet) as ViewSet, group_concat(distinct `Table`) as `Table`, Form
             FROM spschema_form s
             WHERE `Table`='$table'
             GROUP BY Form
-            ORDER BY IF(ViewSet='Collection', 1, IF(ViewSet='Discipline', 2, IF(ViewSet='Common', 3, 4)))");
+            -- ORDER BY IF(ViewSet='Collection', 1, IF(ViewSet='Discipline', 2, IF(ViewSet='Common', 3, 4)))");
         if ($query->num_rows()) {
             foreach ($query->result() as $row) {
                 $ret[] = array(

@@ -9,8 +9,8 @@
             isinternal="false" resourcelabels="false">
                 <desc><![CDATA[The Collection Object form.]]></desc>
                 <altviews>
-                    <altview name="Collection Object View" viewdef="Collection Object" mode="view"/>
-                    <altview name="Collection Object Edit" viewdef="Collection Object" mode="edit" default="true"/>
+                    <altview name="Collection Object View" viewdef="CollectionObject" mode="view"/>
+                    <altview name="Collection Object Edit" viewdef="CollectionObject" mode="edit" default="true"/>
                 </altviews>
         </view>
 
@@ -128,7 +128,7 @@
     </views>
 
     <viewdefs>
-        <viewdef name="Collection Object" 
+        <viewdef name="CollectionObject" 
             type="form" 
             class="edu.ku.brc.specify.datamodel.CollectionObject" 
             gettable="edu.ku.brc.af.ui.forms.DataGetterForObj" 
@@ -145,12 +145,11 @@
                 <row>
                     <cell type="label" labelfor="1"/>
                     <cell type="field" id="1" name="catalogNumber" uitype="formattedtext" colspan="5"/>
-                    <cell type="field" id="avh" name="this" uitype="plugin" initialize="name=WebLinkButton;weblink=AVHLink"/>
-					<cell type="panel" id="2" name="CollBranchInfoPanel" coldef="55px,2px,70px,2px,45px,5px,80px,5px,40px,2px,20px,2px,99px" rowdef="p,2px" colspan="11" initialize="align=right;">
+                    <cell type="panel" id="2" name="CollBranchInfoPanel" coldef="113px,2px,55px,2px,55px,5px,85px,5px,40px,2px,20px,2px,99px" rowdef="p,2px" colspan="13" initialize="align=right;">
                         <rows>
                             <row>
+                                <cell type="label" label=""/>
                                 <cell type="field" id="types" name="yesNo1" uitype="checkbox" readonly="true"/>
-                                <cell type="field" id="imaged" name="yesNo4" uitype="checkbox" readonly="true"/>
                                 <cell type="field" id="gpi" name="yesNo5" uitype="checkbox" readonly="true"/>
                                 <cell type="field" id="multisheets" name="yesNo2" uitype="checkbox" readonly="true"/>
                                 <cell type="label" labelfor="parts"/>
@@ -179,14 +178,14 @@
                 </row>
                 <row>
                     <cell type="label" label=""/>
-                    <cell type="panel" id="pluginPanel" name="pluginPanel" coldef="218px,2px,99px,2px,99px,2px,99px,2px,99px,2px,99px,2px" rowdef="p" colspan="18">
+                    <cell type="panel" id="pluginPanel" name="pluginPanel" coldef="420px,2px,99px,2px,99px,2px,99px,2px" rowdef="p" colspan="18">
                         <rows>
                             <row>
-                                <cell type="subview" id="exsiccataitem" viewname="ExsiccataItem" name="exsiccataItems" initialize="align=right;btn=true" colspan="1"/>
+                                <!--cell type="subview" id="exsiccataitem" viewname="ExsiccataItem" name="exsiccataItems" initialize="align=right;btn=true" colspan="1"/-->
                                 <cell type="subview" id="collectionobjectattribute" viewname="CollectionObjectAttribute" name="collectionObjectAttribute" initialize="align=right;btn=true"/>
                                 <cell type="subview" id="conservdescriptions" viewname="ConservDescriptionSub" name="conservDescriptions" initialize="align=right;btn=true"/>
                                 <cell type="subview" id="dnasequences" viewname="DNASequenceSubView" name="dnaSequences" initialize="align=right;btn=true" colspan="1"/>
-                                <cell type="subview" id="projects" viewname="ProjectSub" name="projects" initialize="align=right;btn=true" colspan="1"/>
+                                <!--cell type="subview" id="projects" viewname="ProjectSub" name="projects" initialize="align=right;btn=true" colspan="1"/-->
                                 <cell type="subview" id="attachments" viewname="CollectionObjectAttachmentMEL" name="collectionObjectAttachments" initialize="align=right;btn=true"/>
                             </row>
                         </rows>
@@ -229,7 +228,7 @@
                     <cell type="label" label="" colspan="1"/>
                     <cell type="label" labelfor="19" colspan="3"/>
                     <cell type="field" id="19" name="timestampModified" uitype="label" readonly="true" colspan="3"/>
-                    <cell type="label" labelfor="22"/>
+				    <cell type="label" labelfor="22"/>
                     <cell type="field" id="22" name="text2" uitype="text" colspan="3"/>
 				</row>
             </rows>
@@ -407,8 +406,8 @@
                     <cell type="separator" label="Other" colspan="24"/>
                 </row>
                 <row>
-                    <!--<cell type="label" labelfor="40"/>
-                    <cell type="field" id="40" name="text6" uitype="text" colspan="21"/-->
+                    <cell type="label" labelfor="40"/>
+                    <cell type="field" id="40" name="text6" uitype="text" colspan="21"/>
                 </row>
                 <row>
                     <cell type="label" labelfor="41"/>
@@ -481,10 +480,6 @@
                      <cell type="label" labelfor="1"/>
                     <cell type="field" id="1" name="shortDesc" uitype="combobox" colspan="3"/>
                </row>
-			   <row> 
-                     <cell type="label" labelfor="2"/>
-                    <cell type="field" id="2" name="backgroundInfo" uitype="combobox" picklist="Event type" colspan="3"/>
-               </row>
                 <row>
                     <cell type="subview" viewname="ConservEvent" id="" label="Conservator events" name="events" colspan="10"/>
                 </row>
@@ -508,79 +503,43 @@
             <columnDef os="exp">p,2px,p,5px:g,p,2px,115px,5px:g,p,2px,p:g,0px</columnDef-->
             <rowDef auto="true" cell="p" sep="2px"/>
             <rows>
-				<row>
-					<cell type="separator" label="Destructive sampling" colspan="8"/>
-				</row>
                 <row>
                     <cell type="label" labelfor="16"/>
-                    <cell type="field" id="16" name="examinedByAgent" uitype="querycbx" initialize="name=Agent;title=Agent" colspan="6"/>
-				</row>
-				<row>
+                    <cell type="field" id="16" name="completedComments" uitype="text" colspan="1"/>
                     <cell type="label" labelfor="2"/>
-                    <cell type="field" id="2" name="completedDate" uitype="formattedtext" uifieldformatter="Date" colspan="1"/>
-					<cell type="label" labelfor="22"/>
-                    <cell type="field" id="22" name="number2" uitype="combobox" picklist="Date precision" colspan="1"/>	
+                    <cell type="field" id="2" name="conditionReport" uitype="text" colspan="1"/>
                 </row>                
                 <row>
-                    <!--<cell type="label" labelfor="17"/>
+                    <cell type="label" labelfor="17"/>
                     <cell type="field" id="17" name="advTestingExamResults" uitype="text" colspan="1"/>
                     <cell type="label" labelfor="1"/>
-                    <cell type="field" id="1" name="advTestingExam" uitype="text" colspan="1"/>-->
+                    <cell type="field" id="1" name="advTestingExam" uitype="text" colspan="1"/>
                     <!--cell type="label" labelfor="3"/>
                     <cell type="field" id="3" name="completedDate" uitype="formattedtext" uifieldformatter="Date"/-->
                 </row>
                 <row>
                     <cell type="label" labelfor="18"/>
-                    <cell type="field" id="18" name="photoDocs" uitype="textareabrief" rows="1" colspan="6"/>
+                    <cell type="field" id="18" name="remarks" uitype="textareabrief" rows="2" colspan="6"/>
                 </row>
                 <row>
                     <cell type="label" labelfor="19"/>
-                    <cell type="field" id="19" name="completedComments" uitype="textareabrief" rows="1" colspan="6"/>
-                </row>
-				<row>
-					<cell type="separator" label="Damage to specimen" colspan="8"/>
-				</row>	
-				<row>
-                    <cell type="label" labelfor="17"/>
-                    <cell type="field" id="17" name="advTestingExamResults" uitype="combobox" picklist="Cause of damage" colspan="1"/>
-                    <cell type="label" labelfor="20"/>
-                    <cell type="field" id="20" name="conditionReport" uitype="combobox" picklist="Severity" colspan="1"/>
-                </row>
-				<row>
-					<cell type="label" labelfor="1"/>
-                    <cell type="field" id="1" name="advTestingExam" uitype="text" colspan="1"/>
-				</row>
-				<row>
-					<cell type="label" labelfor="21"/>
-                    <cell type="field" id="21" name="examDate" uitype="formattedtext" uifieldformatter="Date" colspan="1"/>
-					<cell type="label" labelfor="23"/>
-                    <cell type="field" id="23" name="number1" uitype="combobox" picklist="Date precision" colspan="1"/>
-				</row>	
-				<row>
-					<cell type="label" labelfor="5"/>
-					<cell type="field" id="5" name="curator" uitype="querycbx" initialize="name=Agent;title=Agent" colspan="6"/>
-				</row>
-				<row>
-                    <cell type="label" labelfor="14"/>
-                    <cell type="field" id="14" name="treatmentCompDate" uitype="formattedtext" uifieldformatter="Date" colspan="1"/>
+                    <cell type="field" id="19" name="curator" uitype="querycbx" initialize="name=Agent;title=Agent" colspan="6"/>
                 </row>
                 <row>
                     <cell type="label" labelfor="7"/>
                     <cell type="field" id="7" name="treatmentReport" uitype="textareabrief" rows="2" colspan="6"/>
                 </row>
-				<row>
-					<cell type="separator" label="" colspan="8"/>
-				</row>
-				<row>
-					<cell type="label" label=""/>
-				</row>	
                 <row>
                     <cell type="label" labelfor="13"/>
-                    <cell type="field" id="13" name="text1" uitype="text" colspan="6"/>
+                    <cell type="field" id="13" name="treatedByAgent" uitype="querycbx" initialize="name=Agent;title=Agent" colspan="6"/>
                 </row>
                 <row>
+                    <cell type="label" labelfor="14"/>
+                    <cell type="field" id="14" name="treatmentCompDate" uitype="formattedtext" uifieldformatter="Date" colspan="1"/>
+                </row> 
+                <row>
                     <cell type="label" labelfor="15"/>
-                    <cell type="field" id="15" name="remarks" uitype="textareabrief" rows="2" colspan="6"/>
+                    <cell type="field" id="15" name="photoDocs" uitype="textareabrief" rows="2" colspan="6"/>
                 </row>                
                 <row> 
                     <!--cell type="label" labelfor="5"/>

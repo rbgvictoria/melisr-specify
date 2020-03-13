@@ -1,7 +1,7 @@
 DELIMITER $$
 
 DROP PROCEDURE IF EXISTS `create_schema` $$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `create_schema`()
+CREATE DEFINER=`root`@`localhost` PROCEDURE `create_schema`(in_db VARCHAR(32))
 BEGIN
 
 DROP TABLE IF EXISTS spschema_table;
@@ -75,19 +75,19 @@ CREATE TABLE  spschema_relationship (
 INSERT INTO spschema_table (TableName)
 SELECT TABLE_NAME
 FROM information_schema.`TABLES`
-WHERE TABLE_SCHEMA=@db;
+WHERE TABLE_SCHEMA=in_db;
 
 INSERT INTO spschema_field (TableID, TableName, FieldName, isNullable, FieldType, FieldKey)
 SELECT t.TableID, c.TABLE_NAME, c.COLUMN_NAME, c.IS_NULLABLE, c.COLUMN_TYPE, c.COLUMN_KEY
 FROM information_schema.`COLUMNS` c
 JOIN spschema_table t ON c.TABLE_NAME=t.TableName
-WHERE TABLE_SCHEMA=@db;
+WHERE TABLE_SCHEMA=in_db;
 
 INSERT INTO spschema_index (TableID, TableName, Key_name, Non_unique, Seq_in_index, ColumnID, ColumnName, Index_type, Cardinality, IsNullable)
 SELECT f.TableID, s.TABLE_NAME, s.INDEX_NAME, s.NON_UNIQUE, s.SEQ_IN_INDEX, f.FieldID, s.COLUMN_NAME, s.INDEX_TYPE, s.CARDINALITY, s.NULLABLE
 FROM information_schema.STATISTICS s
 JOIN spschema_field f ON s.TABLE_NAME=f.TableName AND s.COLUMN_NAME=f.FieldName
-WHERE s.TABLE_SCHEMA=@db;
+WHERE s.TABLE_SCHEMA=in_db;
 
 INSERT INTO spschema_relationship (RelationshipName, FromTableName, FromTableID, FromColumnName, FromColumnID,
   ToTableName, ToTableID, ToColumnName, ToColumnID)
@@ -96,7 +96,7 @@ SELECT k.CONSTRAINT_NAME, k.TABLE_NAME, ff.TableID, k.COLUMN_NAME, ff.FieldID,
 FROM information_schema.KEY_COLUMN_USAGE k
 JOIN spschema_field ff ON k.TABLE_NAME=ff.TableName AND k.COLUMN_NAME=ff.FieldName
 JOIN spschema_field ft ON k.REFERENCED_TABLE_NAME=ft.TableName AND k.REFERENCED_COLUMN_NAME=ft.FieldName
-WHERE k.TABLE_SCHEMA=@db;
+WHERE k.TABLE_SCHEMA=in_db;
 
 
 END $$
